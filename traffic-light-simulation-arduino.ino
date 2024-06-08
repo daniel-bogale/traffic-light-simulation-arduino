@@ -1,10 +1,10 @@
 #include <EEPROM.h>
 
 #define APP_NUM     4 // Number of apparatus.
-#define GREEN_DELAY 3000 // Green light delay
+#define GREEN_DELAY 4000 // Green light delay
 #define YELLOW_DELAY 1000 // Yellow light delay
-#define MAX_DELAY 9000 // Yellow light delay
-#define DELAY_CHANGE 3000 // Ultrasonic function delay
+#define MAX_DELAY 12000 // Yellow light delay
+#define DELAY_CHANGE 4000 // Ultrasonic function delay
 #define CAR_COUNT_THRESHOLD 11 // Ultrasonic function delay
 
 
@@ -110,11 +110,7 @@ void loop() {
     Serial.print(data[2]);
     Serial.print(",");
     Serial.println(data[3]);
-    Serial.println("******");
 
-    
-    
-   
       // Defualt function like normal trafic lights
     for (uint8_t i = 0; i < APP_NUM; i++) { //
       if(i==turn){
@@ -140,7 +136,7 @@ void loop() {
       if(ultra_delay != 0 and delays[next]<MAX_DELAY){
           delays[next]=delays[next]+DELAY_CHANGE;
       }
-    }
+    } 
 
     for (int i = 0; i < 4; i++) {
       writeIntToEEPROM(i * 2 + 4, delays[i]);
