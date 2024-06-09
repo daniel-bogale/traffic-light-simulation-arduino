@@ -1,38 +1,38 @@
 // Define the analog pins used as digital pins
-const int trigPin_1 = 14; // A0
-const int echoPin_1 = 15; // A1
-const int redLightPin_1 = 16;
+const int trigPin = 14; // A0
+const int echoPin = 15; // A1
+const int redLightPin = 16;
 
 void setup() {
   Serial.begin(9600);
-  pinMode(trigPin_1, OUTPUT);
-  pinMode(echoPin_1, INPUT);
-  pinMode(redLightPin_1, OUTPUT);
+  pinMode(trigPin, OUTPUT);
+  pinMode(echoPin, INPUT);
+  pinMode(redLightPin, OUTPUT);
 }
 
 void loop() {
   long duration, distance;
   
-  // Clear the trigPin_1
-  digitalWrite(trigPin_1, LOW);
+  // Clear the trigPin
+  digitalWrite(trigPin, LOW);
   delayMicroseconds(2);
   
-  // Set the trigPin_1 HIGH for 10 microseconds
-  digitalWrite(trigPin_1, HIGH);
+  // Set the trigPin HIGH for 10 microseconds
+  digitalWrite(trigPin, HIGH);
   delayMicroseconds(10);
-  digitalWrite(trigPin_1, LOW);
+  digitalWrite(trigPin, LOW);
   
-  // Read the echoPin_1, returns the sound wave travel time in microseconds
-  duration = pulseIn(echoPin_1, HIGH);
+  // Read the echoPin, returns the sound wave travel time in microseconds
+  duration = pulseIn(echoPin, HIGH);
   
   // Calculate the distance
   distance = duration * 0.034 / 2;
 
   // If distance is less than 20 cm, turn on the red light
   if (distance < 6) {
-    digitalWrite(redLightPin_1, HIGH);
+    digitalWrite(redLightPin, HIGH);
   } else {
-    digitalWrite(redLightPin_1, LOW);
+    digitalWrite(redLightPin, LOW);
   }
   
   // Print the distance on the Serial Monitor

@@ -1,10 +1,10 @@
-const int trigPin_1 = 9; // Pin connected to Trig of HC-SR04
-const int echoPin_1 = 10; // Pin connected to Echo of HC-SR04
+const int trigPin = 9; // Pin connected to Trig of HC-SR04
+const int echoPin = 10; // Pin connected to Echo of HC-SR04
 
 void setup() {
   Serial.begin(9600); // Starts the serial communication
-  pinMode(trigPin_1, OUTPUT); // Sets the trigPin as an OUTPUT
-  pinMode(echoPin_1, INPUT); // Sets the echoPin_1 as an INPUT
+  pinMode(trigPin, OUTPUT); // Sets the trigPin as an OUTPUT
+  pinMode(echoPin, INPUT); // Sets the echoPin as an INPUT
 }
 
 void loop() {
@@ -12,16 +12,16 @@ void loop() {
   int distance;
 
   // Clears the trigPin
-  digitalWrite(trigPin_1, LOW);
+  digitalWrite(trigPin, LOW);
   delayMicroseconds(2);
   
   // Sets the trigPin on HIGH state for 10 microseconds
-  digitalWrite(trigPin_1, HIGH);
+  digitalWrite(trigPin, HIGH);
   delayMicroseconds(10);
-  digitalWrite(trigPin_1, LOW);
+  digitalWrite(trigPin, LOW);
   
-  // Reads the echoPin_1, returns the sound wave travel time in microseconds
-  duration = pulseIn(echoPin_1, HIGH);
+  // Reads the echoPin, returns the sound wave travel time in microseconds
+  duration = pulseIn(echoPin, HIGH);
 
   // Debugging: Print the duration to see if it makes sense
   Serial.print("Duration: ");
