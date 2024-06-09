@@ -1,4 +1,5 @@
 #include <EEPROM.h>
+#include <NewPing.h>
 
 #define APP_NUM 4 // Number of apparatus.
 #define GREEN_DELAY 4000 // Green light delay
@@ -7,10 +8,18 @@
 #define DELAY_CHANGE 4000 // Ultrasonic function delay
 #define CAR_COUNT_THRESHOLD 11 // Car count threshold for changing delays
 
-// Define the analog pins used as digital pins
-const int trigPin = 14; // A0
-const int echoPin = 15; // A1
-const int redLightPin = 16;
+// Define the ultrasonic sensor pins
+const int trigPin1 = 14; // A0
+const int echoPin1 = 15; // A1
+const int redLightPin1 = 16;
+const int trigPin2 = 17; // Another digital pin
+const int echoPin2 = 18; // Another digital pin
+const int redLightPin2 = 19;
+
+#define MAX_DISTANCE 200 // Maximum distance to ping for (in cm). Maximum sensor distance is rated at 400-500cm.
+
+NewPing sonar1(trigPin1, echoPin1, MAX_DISTANCE); // NewPing setup of pins and maximum distance.
+NewPing sonar2(trigPin2, echoPin2, MAX_DISTANCE); // NewPing setup of pins and maximum distance.
 
 // Traffic lights
 int green[APP_NUM] = {2, 5, 8, 11};
@@ -65,9 +74,8 @@ void setup() {
   delay(50);
 
   // Initialize ultrasonic sensor pins
-  pinMode(trigPin, OUTPUT);
-  pinMode(echoPin, INPUT);
-  pinMode(redLightPin, OUTPUT);
+  pinMode(redLightPin1, OUTPUT);
+  pinMode(redLightPin2, OUTPUT);
 
   // Read data from EEPROM
   for (int i = 0; i < 4; i++) {
@@ -83,34 +91,28 @@ void loop() {
   unsigned long currentMillis = millis();
 
   // Ultrasonic sensor code
-  long duration, distance;
-
-  // Clear the trigPin
-  digitalWrite(trigPin, LOW);
-  delayMicroseconds(2);
-
-  // Set the trigPin HIGH for 10 microseconds
-  digitalWrite(trigPin, HIGH);
-  delayMicroseconds(10);
-  digitalWrite(trigPin, LOW);
-
-  // Read the echoPin, returns the sound wave travel time in microseconds
-  duration = pulseIn(echoPin, HIGH);
-
-  // Calculate the distance
-  distance = duration * 0.034 / 2;
+  int distance1 = sonar1.ping_cm();
+  int distance2 = sonar2.ping_cm();
 
   // If distance is less than 6 cm, turn on the red light
-  if (distance < 6 && turn != 2  ){
-    digitalWrite(redLightPin, HIGH);
+  if (distance1 > 0 && distance1 < 6 && turn != 3) {
+    digitalWrite(redLightPin1, HIGH);
   } else {
-    digitalWrite(redLightPin, LOW);
+    digitalWrite(redLightPin1, LOW);
+  }
+  if (distance2 > 0 && distance2 < 6 && turn != 1) {
+    digitalWrite(redLightPin2, HIGH);
+  } else {
+    digitalWrite(redLightPin2, LOW);
   }
 
-  // Print the distance on the Serial Monitor
-  Serial.print("Distance: ");
-  Serial.print(distance);
-  Serial.println(" cm");
+  // Print the distances on the Serial Monitor
+//  Serial.print("Distance 1: ");
+//  Serial.print(distance1);
+//  Serial.println(" cm");
+//  Serial.print("Distance 2: ");
+//  Serial.print(distance2);
+//  Serial.println(" cm");
 
   if (Serial.available()) {
     // Read the incoming data
